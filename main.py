@@ -1,5 +1,7 @@
 import streamlit as st
 import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
 import pickle
 import time
 from PIL import Image
@@ -16,6 +18,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.linear_model import LogisticRegression
 train=pd.read_csv(r"C:\Users\shash\Downloads\archive (16)\train_u6lujuX_CVtuZ9i.csv")
+trainn=train
 test=pd.read_csv(r"C:\Users\shash\Downloads\archive (16)\test_Y3wMUE5_7gLdaTN.csv")
 train["Loan_Status"].replace({"Y":1,"N":0},inplace=True)
 train.Dependents.replace({"3+":3},inplace=True)
@@ -60,7 +63,8 @@ t=pd.DataFrame(np.array([["Male","Yes",1,"Graduate","No",3076,1500,10000,360,"Ur
 st.title("Github Architects")
 
 st.sidebar.title("Team Github Architects")
-choice=st.sidebar.radio("Select the option",["Project Overview","Model Summary","Predict Your Loan Status","About the Team"])
+choice=st.sidebar.radio("Select the option",["Project Overview","Data Analytics","Model Summary","Predict Your Loan Status","About the Team"])
+#choice="Data Analytics"
 if choice=="Project Overview":
     st.header("Project Overview")
     st.write('''In our loan prediction endeavor, we delved into a comprehensive dataset 
@@ -139,3 +143,14 @@ if choice=="About the Team":
     st.markdown("### B1 Shashvat Ahuja  21103026")
     st.markdown("### B1 Harsh Dhariwal  21103267")
     st.subheader("\nSubmitted to Dr Alka Singhal.")
+if choice=="Data Analytics":
+    st.subheader("Get Your Analytics Done")
+    cl1,cl2=st.columns(2)
+    x=cl1.selectbox("select X variable",["ApplicantIncome","LoanAmount","CoapplicantIncome"])
+    y=cl2.selectbox("Select Y variable",["ApplicantIncome","LoanAmount","CoapplicantIncome"])
+    cl3,cl4=st.columns(2)
+    hue=cl3.selectbox("Select Hue",["Education","Gender","Property_Area"])
+    style=cl4.selectbox("Select Style",["Education","Gender","Property_Area","Loan_Status"])
+    if(st.button("Submit")):
+        img=sns.scatterplot(x=x, y=y, data=trainn, style=style, hue=hue)
+        st.pyplot(img.get_figure())
